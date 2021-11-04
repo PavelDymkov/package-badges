@@ -1,0 +1,14 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+    "title": "Package badges",
+    "description": "Creating badges",
+
+    "type": "object",
+    "properties": {
+        "outDir": {
+            "description": "Path for generated badges",
+            "type": "string"
+        }
+    }
+}

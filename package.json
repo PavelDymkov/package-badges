@@ -1,0 +1,40 @@
+{
+    "name": "package-badges",
+    "version": "1.0.0",
+    "description": "",
+    "author": {
+        "name": "Pavel Dymkov",
+        "email": "dymkov86@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PavelDymkov/package-badges"
+    },
+    "license": "ISC",
+    "keywords": [],
+    "main": "lib/index.js",
+    "cli": {
+        "badges": "cli.js"
+    },
+    "files": [
+        "cli.js",
+        "lib/**/*.js",
+        "lib/**/*.d.ts",
+        "schema.json"
+    ],
+    "scripts": {
+        "build": "rm -rf lib && tsc",
+        "start": "tsc --watch"
+    },
+    "dependencies": {
+        "badge-maker": "^3.3.1",
+        "commander": "^8.3.0",
+        "logical-not": "^1.0.9",
+        "shelljs": "^0.8.4"
+    },
+    "devDependencies": {
+        "@types/shelljs": "^0.8.9",
+        "prettier": "^2.4.1",
+        "typescript": "^4.4.4"
+    }
+}
