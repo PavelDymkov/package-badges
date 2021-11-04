@@ -1,6 +1,6 @@
 {
     "name": "package-badges",
-    "version": "1.0.0",
+    "version": "0.7.3",
     "description": "",
     "author": {
         "name": "Pavel Dymkov",
@@ -13,7 +13,7 @@
     "license": "ISC",
     "keywords": [],
     "main": "lib/index.js",
-    "cli": {
+    "bin": {
         "badges": "cli.js"
     },
     "files": [
@@ -23,7 +23,7 @@
         "schema.json"
     ],
     "scripts": {
-        "build": "rm -rf lib && tsc",
+        "build": "ts-node --project scripts/tsconfig.json scripts/build.ts",
         "start": "tsc --watch"
     },
     "dependencies": {
@@ -35,6 +35,7 @@
     "devDependencies": {
         "@types/shelljs": "^0.8.9",
         "prettier": "^2.4.1",
+        "ts-node": "^10.4.0",
         "typescript": "^4.4.4"
     }
 }

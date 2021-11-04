@@ -71,7 +71,7 @@ function getTarget(fileName: string, outDir: string, baseUrl?: string): string {
         return baseUrl + fileName;
     }
 
-    const origin = exec("git config --get remote.origin.url")
+    const origin = exec("git config --get remote.origin.url", { silent: true })
         .stdout.trim()
         .replace(/^(https:\/\/github.com\/|git@github.com:)/, "")
         .replace(/\.git$/, "");
