@@ -1,30 +1,23 @@
 {
     "name": "package-badges",
-    "version": "0.7.3",
-    "description": "",
+    "version": "1.0.0",
+    "description": "Create badges for your package.",
     "author": {
         "name": "Pavel Dymkov",
         "email": "dymkov86@gmail.com"
     },
+    "license": "ISC",
+    "keywords": [
+        "badges"
+    ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/PavelDymkov/package-badges"
+        "url": "https://github.com/PavelDymkov/package-badges.git"
     },
-    "license": "ISC",
-    "keywords": [],
-    "main": "lib/index.js",
-    "bin": {
-        "badges": "cli.js"
-    },
-    "files": [
-        "cli.js",
-        "lib/**/*.js",
-        "lib/**/*.d.ts",
-        "schema.json"
-    ],
     "scripts": {
-        "build": "ts-node --project scripts/tsconfig.json scripts/build.ts",
-        "start": "tsc --watch"
+        "build": "packagr",
+        "prepublishOnly": "exit 1",
+        "start": "packagr --dev"
     },
     "dependencies": {
         "badge-maker": "^3.3.1",
@@ -34,8 +27,8 @@
     },
     "devDependencies": {
         "@types/shelljs": "^0.8.9",
+        "npm-packagr": "^0.0.5",
         "prettier": "^2.4.1",
-        "ts-node": "^10.4.0",
         "typescript": "^4.4.4"
     }
 }

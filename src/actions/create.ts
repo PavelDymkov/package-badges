@@ -4,28 +4,26 @@ import { not } from "logical-not";
 import { join } from "path";
 import { exec, mkdir, test } from "shelljs";
 
-import { getConfig } from "../config";
+import { getConfig } from "../tools/config";
 
-interface CreateOptions {
-    fileName: string;
-    baseUrl?: string;
-    config?: string;
+export interface CreateOptions {
     label?: string;
     labelColor?: string;
     message: string;
     messageColor?: string;
+    config?: string;
 }
 
-export function create({
-    fileName,
-    baseUrl,
-    config,
-    label = "",
-    labelColor = "",
-    message,
-    messageColor = "",
-}: CreateOptions): void {
-    const { outDir, readme } = getConfig(config);
+export function create(fileName: string, options: CreateOptions): void {
+    const {
+        config,
+        label = "",
+        labelColor = "",
+        message,
+        messageColor = "",
+    } = options;
+
+    const { baseUrl, outDir, readme } = getConfig(config);
 
     if (not(/\.svg$/.test(fileName))) fileName += ".svg";
 

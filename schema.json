@@ -9,6 +9,14 @@
         "outDir": {
             "description": "Path for generated badges",
             "type": "string"
+        },
+        "readme": {
+            "description": "Path to README.md",
+            "type": "string"
+        },
+        "baseUrl": {
+            "description": "Base url to badges",
+            "type": "string"
         }
     }
 }

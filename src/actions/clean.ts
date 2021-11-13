@@ -2,9 +2,9 @@ import { readFileSync as read, writeFileSync as write } from "fs";
 import { join } from "path";
 import { rm, test } from "shelljs";
 
-import { getConfig } from "../config";
+import { getConfig } from "../tools/config";
 
-interface CleanOptions {
+export interface CleanOptions {
     config?: string;
 }
 
