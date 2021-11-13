@@ -8,8 +8,8 @@ export interface CleanOptions {
     config?: string;
 }
 
-export function clean(options: CleanOptions): void {
-    const { outDir, readme } = getConfig(options.config);
+export function clean(options?: CleanOptions): void {
+    const { outDir, readme } = getConfig(options?.config);
 
     const badgesPath = join(outDir, "*.svg");
 

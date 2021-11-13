@@ -1,6 +1,8 @@
 import { npmPackagr } from "npm-packagr";
 import {
     assets,
+    badge,
+    BadgeType,
     build,
     doIf,
     git,
@@ -32,6 +34,20 @@ npmPackagr({
                 packagr: "./cli.js",
             };
             packageJson.types = ".";
+        }),
+
+        doIf({
+            env: "publish",
+            pipelines: [
+                badge(BadgeType.Build),
+                badge(BadgeType.License),
+                badge("fun", {
+                    label: "Make",
+                    labelColor: "aqua",
+                    message: "Badges",
+                    messageColor: "fuchsia",
+                }),
+            ],
         }),
 
         assets("LICENSE", "README.md", "schema.json", "src/cli.js"),
