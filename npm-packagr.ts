@@ -15,9 +15,7 @@ npmPackagr({
             pipelines: [
                 git("check-status"),
 
-                build(({ exec }) => {
-                    exec("tsc");
-                }),
+                build(({ exec }) => exec("tsc")),
 
                 version("patch"),
 
