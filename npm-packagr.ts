@@ -4,6 +4,7 @@ import {
     badge,
     BadgeType,
     build,
+    cleanBadges,
     doIf,
     git,
     packageJSON,
@@ -39,6 +40,8 @@ npmPackagr({
         doIf({
             env: "publish",
             pipelines: [
+                cleanBadges(),
+
                 badge(BadgeType.Build),
                 badge(BadgeType.License),
                 badge("fun", {
