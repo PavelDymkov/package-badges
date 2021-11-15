@@ -3,8 +3,6 @@ import {
     assets,
     badge,
     BadgeType,
-    build,
-    cleanBadges,
     doIf,
     git,
     packageJSON,
@@ -13,18 +11,13 @@ import {
 
 npmPackagr({
     pipelines: [
-        doIf({
-            env: "publish",
-            pipelines: [
-                git("check-status"),
+        doIf("build", [
+            git("check-status"),
 
-                build(({ exec }) => exec("tsc")),
+            ({ exec }) => exec("tsc"),
 
-                version("patch"),
-
-                git("push"),
-            ],
-        }),
+            version("patch"),
+        ]),
 
         packageJSON((packageJson) => {
             delete packageJson.scripts;
@@ -32,34 +25,31 @@ npmPackagr({
 
             packageJson.main = "index.js";
             packageJson.bin = {
-                packagr: "./cli.js",
+                packagr: "./bin.js",
             };
             packageJson.types = ".";
         }),
 
-        doIf({
-            env: "publish",
-            pipelines: [
-                cleanBadges(),
-
-                badge(BadgeType.Build),
-                badge(BadgeType.License),
-                badge("fun", {
-                    label: "Make",
-                    labelColor: "aqua",
-                    message: "Badges",
-                    messageColor: "fuchsia",
-                }),
-            ],
-        }),
-
-        assets("LICENSE", "README.md", "schema.json", "src/cli.js"),
-
-        doIf({
-            env: "dev",
-            pipeline: build(({ exec }) => {
-                exec("tsc --watch");
+        doIf("build", [
+            badge(BadgeType.Build),
+            badge(BadgeType.License),
+            badge("fun", {
+                label: "Make",
+                labelColor: "aqua",
+                message: "Badges",
+                messageColor: "fuchsia",
             }),
-        }),
+
+            git("commit", "package-badges"),
+            git("push"),
+        ]),
+
+        assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
+
+        doIf("dev", [
+            ({ exec }) => {
+                exec("tsc --watch");
+            },
+        ]),
     ],
 });
