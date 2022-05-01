@@ -30,3 +30,15 @@ create("build", {
     messageColor: "success",
 });
 ```
+
+## Config
+
+`.badges.json`
+
+```json
+{
+    "outDir": "badges",
+    "readme": "README.md",
+    "baseUrl": "https://raw.githubusercontent.com/PavelDymkov/package-badges/master/"
+}
+```

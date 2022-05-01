@@ -43,8 +43,6 @@ npmPackagr({
             packageJson.types = ".";
         }),
 
-        assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
-
         doIf("build", [
             badge(BadgeType.License),
             badge(BadgeType.TSDeclarations),
@@ -55,6 +53,8 @@ npmPackagr({
                 messageColor: "fuchsia",
             }),
 
+            assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
+
             git("commit", "package-badges"),
             git("push"),
 
@@ -63,6 +63,6 @@ npmPackagr({
             }),
         ]),
 
-        doIf("dev", [npx("tsc --watch")]),
+        doIf("dev", [assets("src/bin.js"), npx("tsc --watch")]),
     ],
 });
