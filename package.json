@@ -1,6 +1,6 @@
 {
     "name": "package-badges",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Create badges for your package.",
     "author": {
         "name": "Pavel Dymkov",
