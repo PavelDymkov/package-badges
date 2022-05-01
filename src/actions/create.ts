@@ -80,7 +80,7 @@ function addTo(badges: string, href: string, altText: string): string {
     altText = `[${altText}]`;
 
     const badge = `!${altText}${href}`;
-    const items = badges ? badges.split(/\s+/) : [];
+    const items = badges ? badges.match(/\!\[.+?\]\(.+?\.svg\)/g)! : [];
 
     const i = items.findIndex(
         (item) => item.includes(href) || item.includes(altText),

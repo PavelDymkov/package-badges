@@ -74,7 +74,7 @@ describe("create", () => {
 
             ![a](x.svg)
             ![b](y.svg)
-            
+
             Content
         `);
 
@@ -89,20 +89,22 @@ describe("create", () => {
         );
     });
 
-    // it("should create badge", () => {
-    //     readme("");
+    it("should create badges with label", () => {
+        readme("");
 
-    //     const name = "test";
-    //     const message = "message";
+        const label = "label";
 
-    //     create(name, { config, message });
+        create(name, { config, label, message });
 
-    //     const badge = join(badges, name + ".svg");
+        const name2 = name + "-x";
+        const message2 = message + "-x";
+        const label2 = "label-x";
 
-    //     ok(test("-f", badge));
+        create(name2, { config, label: label2, message: message2 });
 
-    //     readmeIs(
-    //         `![${message}](https://raw.githubusercontent.com/PavelDymkov/package-badges/master/${badge})\n`,
-    //     );
-    // });
+        readmeIs(
+            badge(name, `${label}: ${message}`),
+            badge(name2, `${label2}: ${message2}`),
+        );
+    });
 });
