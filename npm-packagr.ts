@@ -26,6 +26,10 @@ npmPackagr({
                 commitHooks: false,
                 gitTagVersion: false,
             }),
+            version("patch", {
+                commitHooks: false,
+                gitTagVersion: false,
+            }),
         ]),
 
         packageJSON((packageJson) => {
@@ -34,10 +38,12 @@ npmPackagr({
 
             packageJson.main = "index.js";
             packageJson.bin = {
-                packagr: "./bin.js",
+                badges: "./bin.js",
             };
             packageJson.types = ".";
         }),
+
+        assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
 
         doIf("build", [
             badge(BadgeType.License),
@@ -56,8 +62,6 @@ npmPackagr({
                 login: { account: "paveldymkov", email: "dymkov86@gmail.com" },
             }),
         ]),
-
-        assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
 
         doIf("dev", [npx("tsc --watch")]),
     ],
