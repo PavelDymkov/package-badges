@@ -5,18 +5,27 @@ import {
     BadgeType,
     doIf,
     git,
+    npx,
     packageJSON,
+    publish,
+    test,
     version,
 } from "npm-packagr/pipelines";
 
 npmPackagr({
     pipelines: [
         doIf("build", [
-            git("check-status"),
+            git("commit", "package-badges"),
 
-            ({ exec }) => exec("tsc"),
+            npx("tsc"),
+            badge(BadgeType.Build),
+            test(),
+            badge(BadgeType.Test),
 
-            version("patch"),
+            version("patch", {
+                commitHooks: false,
+                gitTagVersion: false,
+            }),
         ]),
 
         packageJSON((packageJson) => {
@@ -31,8 +40,8 @@ npmPackagr({
         }),
 
         doIf("build", [
-            badge(BadgeType.Build),
             badge(BadgeType.License),
+            badge(BadgeType.TSDeclarations),
             badge("fun", {
                 label: "Make",
                 labelColor: "aqua",
@@ -42,14 +51,14 @@ npmPackagr({
 
             git("commit", "package-badges"),
             git("push"),
+
+            publish({
+                login: { account: "paveldymkov", email: "dymkov86@gmail.com" },
+            }),
         ]),
 
         assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
 
-        doIf("dev", [
-            ({ exec }) => {
-                exec("tsc --watch");
-            },
-        ]),
+        doIf("dev", [npx("tsc --watch")]),
     ],
 });

@@ -1,10 +1,11 @@
 import { makeBadge } from "badge-maker";
-import { readFileSync as read, writeFileSync as write } from "fs";
+import { writeFileSync as write } from "fs";
 import { not } from "logical-not";
 import { join } from "path";
 import { exec, mkdir, test } from "shelljs";
 
 import { getConfig } from "../tools/config";
+import { parse } from "../tools/parse-readme";
 
 export interface CreateOptions {
     label?: string;
@@ -40,29 +41,26 @@ export function create(fileName: string, options: CreateOptions): void {
     write(filePath, svg + "\n");
 
     addToReadMe: {
-        const target = getTarget(fileName, outDir, baseUrl);
+        debugger;
+        const { header, badges, content } = parse(readme);
 
+        const href = getBadgeHref(fileName, outDir, baseUrl);
         const altText = label ? `${label}: ${message}` : message;
-        const line = `![${altText}](${target})\n`;
 
-        const source = read(readme).toString();
-        const [block, header] =
-            source.match(/^([#][^#\n]+\n{2})?(\!\[.+?\]\(.+?\.svg\)\n)*/) || [];
+        const file = [header, addTo(badges, href, altText)];
 
-        if (block) {
-            const prefix = source.slice(0, block.length);
-            const suffix = source.slice(block.length);
+        if (content) file.push("\n\n", content);
+        else file.push("\n");
 
-            const extraNewLine = block === header ? "\n" : "";
-
-            write(readme, `${prefix}${line}${extraNewLine}${suffix}`);
-        } else {
-            write(readme, `${line}\n${source}`);
-        }
+        write(readme, file.join(""));
     }
 }
 
-function getTarget(fileName: string, outDir: string, baseUrl?: string): string {
+function getBadgeHref(
+    fileName: string,
+    outDir: string,
+    baseUrl?: string,
+): string {
     if (baseUrl) {
         if (not(baseUrl.endsWith("/"))) baseUrl += "/";
 
@@ -75,4 +73,21 @@ function getTarget(fileName: string, outDir: string, baseUrl?: string): string {
         .replace(/\.git$/, "");
 
     return `https://raw.githubusercontent.com/${origin}/master/${outDir}/${fileName}`;
+}
+
+function addTo(badges: string, href: string, altText: string): string {
+    href = `(${href})`;
+    altText = `[${altText}]`;
+
+    const badge = `!${altText}${href}`;
+    const items = badges ? badges.split(/\s+/) : [];
+
+    const i = items.findIndex(
+        (item) => item.includes(href) || item.includes(altText),
+    );
+
+    if (i === -1) items.push(badge);
+    else items[i] = badge;
+
+    return items.join("\n");
 }

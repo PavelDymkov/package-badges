@@ -1,8 +1,11 @@
-import { readFileSync as read, writeFileSync as write } from "fs";
+import { writeFileSync as write } from "fs";
 import { join } from "path";
-import { rm, test } from "shelljs";
+import { config, rm, test } from "shelljs";
 
 import { getConfig } from "../tools/config";
+import { parse } from "../tools/parse-readme";
+
+config.silent = true;
 
 export interface CleanOptions {
     config?: string;
@@ -11,16 +14,26 @@ export interface CleanOptions {
 export function clean(options?: CleanOptions): void {
     const { outDir, readme } = getConfig(options?.config);
 
-    const badgesPath = join(outDir, "*.svg");
-
-    if (test("-f", badgesPath)) rm(badgesPath);
     if (test("-f", readme)) cleanReadme(readme);
+
+    deleteBadges(outDir);
 }
 
 function cleanReadme(path: string): void {
-    const readme = read(path)
-        .toString()
-        .replace(/(\n\!\[.+?\]\(.+?\.svg\))+\n/, "");
+    const { header, content } = parse(path);
 
-    write(path, readme);
+    const file = content ? header + content : header.trimEnd() + "\n";
+
+    write(path, file);
+}
+
+function deleteBadges(outDir: string): void {
+    const badgesPath = join(outDir, "*.svg");
+    const origin = config.silent;
+
+    config.silent = true;
+
+    rm(badgesPath);
+
+    config.silent = origin;
 }
