@@ -1,3 +1,4 @@
+import { writeFileSync as write } from "fs";
 import { npmPackagr } from "npm-packagr";
 import {
     assets,
@@ -7,14 +8,15 @@ import {
     git,
     npx,
     packageJSON,
+    PipeContext,
     publish,
     test,
     version,
-} from "npm-packagr/pipelines";
+} from "npm-packagr/pipes";
 
 npmPackagr({
-    pipelines: [
-        doIf("build", [
+    pipeline: [
+        doIf("publish", [
             git("commit", "package-badges"),
 
             npx("tsc"),
@@ -43,7 +45,7 @@ npmPackagr({
             packageJson.types = ".";
         }),
 
-        doIf("build", [
+        doIf("publish", [
             badge(BadgeType.License),
             badge(BadgeType.TSDeclarations),
             badge("fun", {
@@ -53,7 +55,9 @@ npmPackagr({
                 messageColor: "fuchsia",
             }),
 
-            assets("LICENSE", "README.md", "schema.json", "src/bin.js"),
+            assets("LICENSE", "README.md", "src/schema.json"),
+
+            createBinJs,
 
             git("commit", "package-badges"),
             git("push"),
@@ -63,6 +67,22 @@ npmPackagr({
             }),
         ]),
 
-        doIf("dev", [assets("src/bin.js"), npx("tsc --watch")]),
+        doIf("dev", [createBinJs, npx("tsc --watch")]),
     ],
 });
+
+function createBinJs({ packageDirectory, path }: PipeContext): void {
+    const file = getBinJs();
+
+    write(path`${packageDirectory}/bin.js`, file);
+}
+
+function getBinJs(): string {
+    const file = `
+        #!/usr/bin/env node
+
+        require("./cli");
+    `;
+
+    return file.trimStart().replace(/(?: )+/g, "");
+}

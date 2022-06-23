@@ -16,21 +16,21 @@
     },
     "scripts": {
         "prepublishOnly": "exit 1",
-        "pub": "packagr",
+        "pub": "packagr --target publish",
         "start": "packagr --target dev",
         "test": "mocha test/*.test.js"
     },
     "dependencies": {
+        "@types/shelljs": "^0.8.11",
         "badge-maker": "^3.3.1",
-        "commander": "^8.3.0",
+        "commander": "^9.3.0",
         "logical-not": "^1.0.9",
-        "shelljs": "^0.8.4"
+        "shelljs": "^0.8.5"
     },
     "devDependencies": {
-        "@types/shelljs": "^0.8.9",
         "mocha": "^10.0.0",
-        "npm-packagr": "^1.0.30",
-        "prettier": "^2.4.1",
-        "typescript": "^4.4.4"
+        "npm-packagr": "^1.0.47",
+        "prettier": "^2.7.1",
+        "typescript": "^4.7.4"
     }
 }

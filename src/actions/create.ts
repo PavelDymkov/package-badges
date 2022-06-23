@@ -2,7 +2,7 @@ import { makeBadge } from "badge-maker";
 import { writeFileSync as write } from "fs";
 import { not } from "logical-not";
 import { join } from "path";
-import { exec, mkdir, test } from "shelljs";
+import { exec as sh, mkdir, test } from "shelljs";
 
 import { getConfig } from "../tools/config";
 import { parse } from "../tools/parse-readme";
@@ -41,10 +41,12 @@ export function create(fileName: string, options: CreateOptions): void {
     write(filePath, svg + "\n");
 
     addToReadMe: {
-        debugger;
         const { header, badges, content } = parse(readme);
 
         const href = getBadgeHref(fileName, outDir, baseUrl);
+
+        if (not(href)) return;
+
         const altText = label ? `${label}: ${message}` : message;
 
         const file = [header, addTo(badges, href, altText)];
@@ -60,19 +62,31 @@ function getBadgeHref(
     fileName: string,
     outDir: string,
     baseUrl?: string,
-): string {
+): string | null {
     if (baseUrl) {
         if (not(baseUrl.endsWith("/"))) baseUrl += "/";
 
         return baseUrl + fileName;
     }
 
-    const origin = exec("git config --get remote.origin.url", { silent: true })
-        .stdout.trim()
+    const isInsideWorkTreeCode =
+        sh("git rev-parse --is-inside-work-tree", {
+            silent: true,
+        }).code === 0;
+
+    if (isInsideWorkTreeCode) return null;
+
+    const origin = exec("git config --get remote.origin.url")
         .replace(/^(https:\/\/github.com\/|git@github.com:)/, "")
         .replace(/\.git$/, "");
 
-    return `https://raw.githubusercontent.com/${origin}/master/${outDir}/${fileName}`;
+    const branch = exec("git rev-parse --abbrev-ref HEAD");
+
+    return `https://raw.githubusercontent.com/${origin}/${branch}/${outDir}/${fileName}`;
+}
+
+function exec(command: string): string {
+    return sh(command, { silent: true }).stdout.trim();
 }
 
 function addTo(badges: string, href: string, altText: string): string {
