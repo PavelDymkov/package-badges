@@ -1,6 +1,6 @@
 {
     "name": "package-badges",
-    "version": "1.0.15",
+    "version": "1.0.17",
     "description": "Create badges for your package and add it to README.md.",
     "author": {
         "name": "Pavel Dymkov",
