@@ -35,8 +35,9 @@ function readmeIs(...expected) {
 
 function badge(name, altText) {
     const badge = join(badges, name + ".svg");
+    const branch = "main";
 
     ok(test("-f", badge));
 
-    return `![${altText}](https://raw.githubusercontent.com/PavelDymkov/package-badges/master/${badge})\n`;
+    return `![${altText}](https://raw.githubusercontent.com/PavelDymkov/package-badges/${branch}/${badge})\n`;
 }

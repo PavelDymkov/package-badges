@@ -74,7 +74,7 @@ function getBadgeHref(
             silent: true,
         }).code === 0;
 
-    if (isInsideWorkTreeCode) return null;
+    if (not(isInsideWorkTreeCode)) return null;
 
     const origin = exec("git config --get remote.origin.url")
         .replace(/^(https:\/\/github.com\/|git@github.com:)/, "")
