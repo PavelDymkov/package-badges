@@ -12,6 +12,7 @@ export interface CreateOptions {
     labelColor?: string;
     message: string;
     messageColor?: string;
+    href?: string;
     config?: string;
 }
 
@@ -22,6 +23,7 @@ export function create(fileName: string, options: CreateOptions): void {
         labelColor = "",
         message,
         messageColor = "",
+        href: link = "",
     } = options;
 
     const { baseUrl, outDir, readme } = getConfig(config);
@@ -49,7 +51,7 @@ export function create(fileName: string, options: CreateOptions): void {
 
         const altText = label ? `${label}: ${message}` : message;
 
-        const file = [header, addTo(badges, href, altText)];
+        const file = [header, addTo(badges, href, altText, link)];
 
         if (content) file.push("\n\n", content);
         else file.push("\n");
@@ -89,11 +91,16 @@ function exec(command: string): string {
     return sh(command, { silent: true }).stdout.trim();
 }
 
-function addTo(badges: string, href: string, altText: string): string {
-    href = `(${href})`;
-    altText = `[${altText}]`;
+function addTo(
+    badges: string,
+    href: string,
+    altText: string,
+    link: string,
+): string {
+    let badge = `![${altText}](${href})`;
 
-    const badge = `!${altText}${href}`;
+    if (link) badge = `[${badge}](${link})`;
+
     const items = badges ? badges.match(/\!\[.+?\]\(.+?\.svg\)/g)! : [];
 
     const i = items.findIndex(

@@ -19,6 +19,7 @@ program
     .option("-LC, --label-color [value]", "Label color")
     .option("-M, --message <text>", "Badge message")
     .option("-MC, --message-color [value]", "Message color")
+    .option("-H, --href [value]", "Create a badge as a link")
     .action((options) =>
         require("./actions/create").create(options.fileName, options),
     );

@@ -42,7 +42,6 @@ npmPackagr({
             packageJson.bin = {
                 badges: "./bin.js",
             };
-            packageJson.types = ".";
         }),
 
         doIf("publish", [

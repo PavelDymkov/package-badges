@@ -9,7 +9,7 @@ const message = "message";
 describe("create", () => {
     beforeEach(prepareTest);
 
-    it("should create badge", () => {
+    it("should create a badge", () => {
         readme("");
 
         create(name, { config, message });
@@ -30,7 +30,7 @@ describe("create", () => {
         readmeIs(badge(name, message), badge(name2, message2));
     });
 
-    it("should replace badge", () => {
+    it("should replace a badge", () => {
         readme("");
 
         create(name, { config, message });
@@ -42,7 +42,7 @@ describe("create", () => {
         readmeIs(badge(name, message));
     });
 
-    it("should create badge with label", () => {
+    it("should create a badge with a label", () => {
         readme("");
 
         const label = "label";
@@ -52,7 +52,7 @@ describe("create", () => {
         readmeIs(badge(name, `${label}: ${message}`));
     });
 
-    it("should add to readme with header", () => {
+    it("should add to readme with a header", () => {
         readme("# Header");
 
         create(name, { config, message });
@@ -60,7 +60,7 @@ describe("create", () => {
         readmeIs("# Header\n\n", badge(name, message));
     });
 
-    it("should add to readme with header and content", () => {
+    it("should add to readme with a header and a content", () => {
         readme("# Header\n\nContent");
 
         create(name, { config, message });
@@ -68,7 +68,7 @@ describe("create", () => {
         readmeIs("# Header\n\n", badge(name, message), "\nContent\n");
     });
 
-    it("should add to readme with header, badges and content", () => {
+    it("should add to readme with a header, badges and a content", () => {
         readme(`
             # Header
 
@@ -89,7 +89,7 @@ describe("create", () => {
         );
     });
 
-    it("should create badges with label", () => {
+    it("should create badges with a label", () => {
         readme("");
 
         const label = "label";
@@ -106,5 +106,17 @@ describe("create", () => {
             badge(name, `${label}: ${message}`),
             badge(name2, `${label2}: ${message2}`),
         );
+    });
+
+    it("should create a badge as a link", () => {
+        readme("");
+
+        const href = "http://site.com";
+
+        create(name, { config, message, href });
+
+        const expected = `[${badge(name, message).trim()}](${href})\n`;
+
+        readmeIs(expected);
     });
 });
